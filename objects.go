@@ -1,3 +1,5 @@
+
+/*
 package main
 
 type User struct {
@@ -7,3 +9,4 @@ type User struct {
 	Email    string
 	Role     string
 }
+*/

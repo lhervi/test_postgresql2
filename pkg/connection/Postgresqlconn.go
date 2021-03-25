@@ -1,4 +1,4 @@
-package main
+package connection
 
 import (
 	"database/sql"
@@ -6,11 +6,12 @@ import (
 )
 
 type Postgresqlconn struct {
-	connString string
-	dbConn     *sql.DB
+	ConnString string
+	DBConn     *sql.DB
 }
 
-func NewPostgresqlconn() *Postgresqlconn {
+//func NewPostgresqlconn() *Postgresqlconn {
+func New() *Postgresqlconn {
 	return &Postgresqlconn{}
 }
 
@@ -20,7 +21,7 @@ func (pc *Postgresqlconn) Connect(psqlInfo string) error {
 	if err != nil {
 		return err
 	}
-	pc.connString = psqlInfo
-	pc.dbConn = db
+	pc.ConnString = psqlInfo
+	pc.DBConn = db
 	return nil
 }

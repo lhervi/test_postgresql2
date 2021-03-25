@@ -4,29 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/lhervi/test_postgresql2/pkg/connection"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/lhervi/test_postgresql2/pkg/connection"
 	_ "github.com/lib/pq"
 )
-
-const psqlInfo string = "postgresql://dbuser:dbuserpassword@localhost:5432/users"
-
-/*************************************
-
-*************************************/
-
-type User struct {
-	ID       int
-	Name     string
-	Lastname string
-	Email    string
-	Role     string
-}
-
-/*************************************
-
-************************************/
 
 func GetAll(c *gin.Context) {
 
@@ -65,13 +48,4 @@ func GetAll(c *gin.Context) {
 		"result": users,
 		"count":  len(users),
 	})
-}
-
-/*************************************
-*************************************/
-
-func main() {
-	router := gin.Default()
-	router.GET("/all", GetAll)
-	router.Run(":3020")
 }
