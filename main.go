@@ -12,6 +12,8 @@ const psqlInfo string = "postgresql://dbuser:dbuserpassword@localhost:5432/users
 
 func GetAll(c *gin.Context) {
 
+	db := Postgresqlconn.NewPostgresqlconn()
+
 	//db, err := sql.Open("postgres", psqlInfo)
 
 	var (
