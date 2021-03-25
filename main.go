@@ -5,23 +5,27 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/lhervi/test_postgresql2/pkg/connection"
 )
 
 const psqlInfo string = "postgresql://dbuser:dbuserpassword@localhost:5432/users"
 
 func GetAll(c *gin.Context) {
 
-	db := Postgresqlconn.NewPostgresqlconn()
+	db := new(Postgresqlconn)
+	err := db.Connect(psqlInfo)
 
-	//db, err := sql.Open("postgres", psqlInfo)
+	if err != nil {
+		c.Writer.WriteHeader(http.StatusNotFound)
+		fmt.Print(err.Error())
+		return
+	}
 
 	var (
 		user  User
 		users []User
 	)
 
-	rows, err := db.Query("SELECT id, name, lastname, email, role FROM UserInfo")
+	rows, err := db.dbConn.Query("SELECT id, name, lastname, email, role FROM UserInfo")
 	if err != nil {
 		c.Writer.WriteHeader(http.StatusNotFound)
 		fmt.Print(err.Error())
@@ -41,4 +45,13 @@ func GetAll(c *gin.Context) {
 		"result": users,
 		"count":  len(users),
 	})
+}
+
+func main() {
+
+	router := gin.Default()
+
+	router.GET("/all", GetAll) // **************  Get all users  **************
+
+	router.Run(":3020")
 }
