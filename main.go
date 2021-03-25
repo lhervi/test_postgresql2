@@ -5,15 +5,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/lhervi/test_postgresql2/pkg/connection"
 )
-
-//var psqlInfo string = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
 const psqlInfo string = "postgresql://dbuser:dbuserpassword@localhost:5432/users"
 
 func GetAll(c *gin.Context) {
-
-	db := Postgresqlconn.NewPostgresconnn()
 
 	//db, err := sql.Open("postgres", psqlInfo)
 
