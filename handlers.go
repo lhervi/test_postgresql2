@@ -1,51 +1,36 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
-	"github.com/lhervi/test_postgresql2/pkg/connection"
-
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/lib/pq"
 )
 
-func GetAll(c *gin.Context) {
+type Handlers struct {
+	Repo Postgresrepo
+}
 
-	db := new(connection.Postgresqlconn)
+func NewHandlers(repo Postgresrepo) *Handlers {
+	return &Handlers{
+		Repo: repo,
+	}
+}
 
-	err := db.Connect(psqlInfo)
+func (h *Handlers) InitRoutes(router *gin.Engine) {
+	router.GET("/all", h.getAll)
+}
 
+func (h *Handlers) getAll(c *gin.Context) {
+	users, err := h.Repo.GetAll()
 	if err != nil {
-		c.Writer.WriteHeader(http.StatusNotFound)
-		fmt.Print(err.Error())
+		c.JSON(http.StatusNotFound, gin.H{
+			"status":  http.StatusNotFound,
+			"message": users,
+		})
 		return
 	}
-
-	var (
-		user  User
-		users []User
-	)
-
-	rows, err := db.DBConn.Query("SELECT id, name, lastname, email, role FROM UserInfo")
-	if err != nil {
-		c.Writer.WriteHeader(http.StatusNotFound)
-		fmt.Print(err.Error())
-		return
-	}
-	for rows.Next() {
-		err = rows.Scan(&user.ID, &user.Name, &user.Lastname, &user.Email, &user.Role)
-		users = append(users, user)
-		if err != nil {
-			c.Writer.WriteHeader(http.StatusNoContent)
-			fmt.Print(err.Error())
-			return
-		}
-	}
-	defer rows.Close()
 	c.JSON(http.StatusOK, gin.H{
-		"result": users,
-		"count":  len(users),
+		"status":  http.StatusOK,
+		"message": users,
 	})
 }
