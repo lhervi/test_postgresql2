@@ -21,6 +21,7 @@ func NewTyniServer(handlers ServerHandlers) *TyniServer {
 func (s *TyniServer) Init() error {
 	router := gin.Default()
 	s.handlers.InitRoutes(router)
+
 	err := router.Run(serverAddress)
 	return err
 }

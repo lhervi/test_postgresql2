@@ -2,7 +2,9 @@ package connection
 
 import (
 	"database/sql"
-	//"fmt"
+	"fmt"
+
+	_ "github.com/lib/pq"
 )
 
 type Postgresqlconn struct {
@@ -17,8 +19,15 @@ func New() *Postgresqlconn {
 
 func (pc *Postgresqlconn) Connect(psqlInfo string) error {
 
+	if psqlInfo == "" {
+		err := fmt.Errorf("the connection string is empty")
+		return err
+	}
+
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
+		//err2:="Check the connection string"
+		fmt.Println(err)
 		return err
 	}
 	pc.ConnString = psqlInfo

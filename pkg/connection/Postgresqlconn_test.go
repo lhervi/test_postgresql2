@@ -1,22 +1,30 @@
 package connection
 
-const pgaddr string = "postgresql://user:password123@localhost:5432/shore_test"
+import (
+	"testing"
+)
 
-/*
-func TestConnect(T *testing.T) {
+const psqlInfo string = "postgresql://dbuser:dbuserpassword@localhost:5432/users"
+const psqlErr string = "postgresql://dbuser:dbuserpassword@localhost:5432/noDb"
 
-	pgrep := New()
-
-
-	ctx := context.Background()
-
-	//pgCloser, err := pgrep.Connect(ctx, pgaddr)
-	pgCloser, err :=
-
-	if err != nil {
-		T.Fatalf(err.Error())
+func TestPostgresqlconn(t *testing.T) {
+	var tests = []struct {
+		testName string
+		conn     string
+		lenErr   bool
+	}{
+		{"Connection string ok", psqlInfo, true},
+		{"No connection string", "", false},
+		{"Wrong connection string", psqlErr, false},
 	}
-	defer pgCloser()
 
+	for _, test := range tests {
+		t.Run(test.testName, func(t *testing.T) {
+			conn := New()
+			err := conn.Connect(test.conn)
+			if err != nil {
+				t.Errorf("the error: %v", err)
+			}
+		})
+	}
 }
-*/

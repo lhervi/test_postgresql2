@@ -1,21 +1,26 @@
 package main
 
-import "fmt"
-
-/*
 import (
-	//"github.com/gin-gonic/gin"
-	//_ "github.com/go-sql-driver/mysql"
-	//_ "github.com/lib/pq"
+	"fmt"
+
+	"github.com/lhervi/test_postgresql2/pkg/connection"
 )
-*/
 
 func main() {
 
-	myapp := new(TyniServer)
-	err := myapp.Init()
+	const psqlInfo string = "postgresql://dbuser:dbuserpassword@localhost:5432/users"
+	conn := new(connection.Postgresqlconn)
+	err := conn.Connect(psqlInfo)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	repo := &Postgresrepo{conn}
+
+	handler := NewHandlers(repo)
+	myapp := NewTyniServer(handler)
+	err = myapp.Init()
 	if err != nil {
 		fmt.Println(err)
 	}
-
 }

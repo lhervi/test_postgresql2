@@ -7,10 +7,10 @@ import (
 )
 
 type Handlers struct {
-	Repo Postgresrepo
+	Repo *Postgresrepo
 }
 
-func NewHandlers(repo Postgresrepo) *Handlers {
+func NewHandlers(repo *Postgresrepo) *Handlers {
 	return &Handlers{
 		Repo: repo,
 	}
