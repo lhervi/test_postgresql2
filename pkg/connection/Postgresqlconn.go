@@ -26,11 +26,15 @@ func (pc *Postgresqlconn) Connect(psqlInfo string) error {
 
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
-		//err2:="Check the connection string"
 		fmt.Println(err)
 		return err
 	}
 	pc.ConnString = psqlInfo
 	pc.DBConn = db
+	err = db.Ping()
+	if err != nil {
+		err := fmt.Errorf("check the connnection string")
+		return err
+	}
 	return nil
 }
