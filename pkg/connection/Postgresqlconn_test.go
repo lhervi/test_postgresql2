@@ -20,7 +20,7 @@ func TestPostgresqlconn(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.testName, func(t *testing.T) {
-			//fmt.Println(test.testName)
+
 			conn := New()
 			err := conn.Connect(test.conn)
 			if err != nil {
